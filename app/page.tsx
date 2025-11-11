@@ -1,65 +1,83 @@
-import Image from "next/image";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import {
+	Card,
+	CardAction,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card';
+
+export interface Office {
+	id: string;
+	name: string;
+  doctor: string;
+  patientCount?: number;
+	address: string;
+	phone: string;
+	email: string;
+}
 
 export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+	const Offices: Office[] = [
+		{
+			id: 'downtown',
+			name: 'Terapia ocupacional',
+      doctor: 'Janneth Granados',
+      patientCount: 120,
+			address: '123 Main St, Cityville',
+			phone: '(123) 456-7890',
+			email: 'info@downtownclinic.com',
+		},
+		{
+			id: 'uptown',
+			name: 'Uptown Medical Center',
+			doctor: 'Dr. Johnson',
+      patientCount: 85,
+			address: '456 Elm St, Cityville',
+			phone: '(987) 654-3210',
+			email: 'info@uptownmedical.com',
+		},
+	];
+
+	return (
+		// "*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4"
+		// <main className="flex h-full container flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start border border-sky/8 dark:border-white/[.145] rounded-md shadow-sm">
+		<main className='h-full container bg-white p-6 border border-sky/8 dark:border-white/[.145] rounded-md shadow-md'>
+			<div className='w-full flex items-center justify-between mb-4'>
+				<h1 className='text-4xl font-bold mb-8'>Offices</h1>
+				<Link href='/offices/new'>
+					<Button className='mb-8'>Add New Office</Button>
+				</Link>
+			</div>
+			<div className='grid grid-cols-4 gap-4'>
+				{Offices.map((office) => (
+					<Link key={office.id} href={`/offices/${office.id}`}>
+						<Card>
+							<CardHeader>
+								{/* <CardDescription>Total Revenue</CardDescription> */}
+								<CardTitle className='text-xl font-semibold tabular-nums @[250px]/card:text-3xl'>
+									{office.name}
+								</CardTitle>
+								{/* <CardAction>
+										<Badge variant='outline'>+12.5%</Badge>
+									</CardAction> */}
+							</CardHeader>
+							<CardFooter className='flex-col items-start gap-1.5 text-sm'>
+								<div className='line-clamp-1 flex gap-2 font-medium'>
+									{office.doctor}
+								</div>
+								<div className='text-muted-foreground w-full flex justify-between'>
+									<span>Pacientes</span>
+                  <Badge variant='outline'>{office.patientCount}</Badge>
+								</div>
+							</CardFooter>
+						</Card>
+					</Link>
+				))}
+			</div>
+		</main>
+	);
 }

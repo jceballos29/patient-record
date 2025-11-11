@@ -1,0 +1,35 @@
+# Dependencias (se instalan en el contenedor)
+node_modules
+.pnpm-store
+
+# Next.js build (se genera en el contenedor)
+.next
+out
+
+# Pruebas
+coverage
+.nyc_output
+
+# Variables de entorno (se pasan desde docker-compose)
+.env.local
+.env.production
+.env.production.local
+
+# Varios
+.DS_Store
+*.pem
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+Dockerfile.dev
+docker-compose.yml
+docker-compose.dev.yml
+.dockerignore
+
+# README y docs
+README.md
+*.md

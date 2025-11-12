@@ -5,9 +5,9 @@ services:
     container_name: patient_record_db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: patient_record_db
     volumes:
       - postgres_data:/var/lib/postgresql
       # Opcional: scripts de inicialización
@@ -15,7 +15,7 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -47,16 +47,16 @@ services:
     tty: true
 
   # Opcional: Adminer para gestionar PostgreSQL visualmente
-  adminer:
-    image: adminer:latest
-    container_name: patient_record_adminer
-    restart: unless-stopped
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres
-    environment:
-      ADMINER_DEFAULT_SERVER: postgres
+  # adminer:
+  #   image: adminer:latest
+  #   container_name: patient_record_adminer
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - postgres
+  #   environment:
+  #     ADMINER_DEFAULT_SERVER: postgres
 
 volumes:
   postgres_data:

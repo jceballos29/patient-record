@@ -1,12 +1,10 @@
+import CreatePatient from '@/components/create-patient';
+import PatientButton from '@/components/patient-button';
+import PatientEmpty from '@/components/patient-empty';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-	Item,
-	ItemActions,
-	ItemContent,
-	ItemTitle,
-} from '@/components/ui/item';
 import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 import { Building } from 'lucide-react';
 import Link from 'next/link';
 
@@ -14,12 +12,30 @@ type Props = {
 	params: { id: string };
 };
 
+export interface Patient {
+	id: string;
+	firstName: string;
+	lastName: string;
+	type: 'SESSIONS' | 'AUTHORIZATIONS';
+	session: number;
+	authorizations: number;
+}
+
+interface OfficeDetail {
+	id: string;
+	name: string;
+	address: string;
+	phone: string;
+	email: string;
+	patients: Patient[];
+}
+
 export default async function OfficeDetail({ params }: Props) {
 	const { id } = params;
 
 	// Aquí podrías fetch desde tu API o prisma para obtener datos reales
 	// Por ahora mostramos datos estáticos de ejemplo
-	const office = {
+	const office: OfficeDetail = {
 		id,
 		name: 'Terapia Ocupacional',
 		address: '456 Elm St, Cityville',
@@ -211,6 +227,7 @@ export default async function OfficeDetail({ params }: Props) {
 				authorizations: 0,
 			},
 		],
+		// patients: [],
 	};
 
 	return (
@@ -240,7 +257,10 @@ export default async function OfficeDetail({ params }: Props) {
 					</div>
 				</div>
 			</header>
-			<div id='content' className='flex grow p-4 gap-4 overflow-hidden'>
+			<div
+				id='content'
+				className='flex grow p-4 gap-4 overflow-hidden'
+			>
 				<div id='summary' className='flex-3 border'></div>
 				<Separator orientation='vertical' />
 				<div
@@ -256,39 +276,21 @@ export default async function OfficeDetail({ params }: Props) {
 							{office.patients.length}
 						</Badge>
 					</div>
-					<div className='h-full overflow-auto p-1.5 space-y-1 rounded-md'>
-							{office.patients.map((patient) => (
-								<Item
-									key={patient.id}
-									variant='outline'
-									size='sm'
-									className='px-2 py-2 hover:bg-slate-50'
-								>
-									<ItemContent>
-										<ItemTitle>
-											{patient.firstName} {patient.lastName}
-										</ItemTitle>
-									</ItemContent>
-									<ItemActions>
-										<Badge className='bg-sky-200 text-xs text-muted-foreground'>
-											{patient.session}
-										</Badge>
-										{patient.type === 'AUTHORIZATIONS' && (
-											<>
-												<Separator
-													orientation='vertical'
-													className='data-[orientation=vertical]:h-4'
-												/>
-												<Badge className='bg-emerald-200 text-xs text-muted-foreground'>
-													{patient.authorizations}
-												</Badge>
-											</>
-										)}
-									</ItemActions>
-								</Item>
+					<div
+						className={cn(
+							'h-full overflow-auto p-1.5 space-y-1 rounded-md',
+							office.patients.length === 0 &&
+								'flex flex-col items-center justify-center',
+						)}
+					>
+						{office.patients.length === 0 && <PatientEmpty />}
+						{office.patients &&
+							office.patients.length > 0 &&
+							office.patients.map((patient) => (
+								<PatientButton key={patient.id} patient={patient} />
 							))}
 					</div>
-					<Button className='w-full mt-2'>Agregar Paciente</Button>
+					<CreatePatient officeId={id} />
 				</div>
 			</div>
 		</main>

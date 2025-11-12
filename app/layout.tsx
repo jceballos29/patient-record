@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: 'Patient Record',
+	title: 'Registro de Pacientes',
 	description: 'A simple patient record application',
 };
 

@@ -17,6 +17,7 @@ datasource db {
 model Office {
   id        String @id @default(cuid())
   name      String
+  doctor    String
 
   patients  Patient[]
 
@@ -26,8 +27,7 @@ model Office {
 
 model Patient {
   id        String @id @default(cuid())
-  firstName String
-  lastName  String
+  name String
   type      PatientType @default(SESSIONS)
 
   defaultSessionPrice Decimal? @db.Decimal(10, 2)
